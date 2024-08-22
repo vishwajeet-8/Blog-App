@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-const write = () => {
+const Write = () => {
   const [value, setValue] = useState("");
   return (
     <div className="add">
@@ -64,4 +64,4 @@ const write = () => {
   );
 };
 
-export default write;
+export default Write;
