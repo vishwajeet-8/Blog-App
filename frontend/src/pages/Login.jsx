@@ -9,17 +9,15 @@ const Login = () => {
   });
   const [err, setErr] = useState(null);
   const navigate = useNavigate();
-  const { currentUser } = useContext(AuthContext);
-  console.log(currentUser);
+  const { login } = useContext(AuthContext);
 
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
   const handleSubmit = async (e) => {
-    console.log("print");
     e.preventDefault();
     try {
-      // await login(inputs);
+      await login(inputs);
       navigate("/");
     } catch (err) {
       setErr(err.response.data);

@@ -52,10 +52,23 @@ export const login = (req, res) => {
     res
       .cookie("access_token", token, {
         httpOnly: true,
+        secure: true,
+        sameSite: "None",
+        path: "http://localhost:3000",
       })
       .status(200)
       .json(other);
   });
 };
 
-export const logout = (req, res) => {};
+export const logout = (req, res) => {
+  res
+    .clearCookie("access_token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      path: "http://localhost:3000",
+    })
+    .status(200)
+    .json("User has been deleted");
+};
