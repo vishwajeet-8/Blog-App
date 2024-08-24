@@ -38,11 +38,11 @@ export const login = (req, res) => {
     if (err) return res.status(500).json(err);
     if (data.length === 0) return res.status(404).json("User not found!");
 
-    const isPasswwordCorrect = bcrypt.compareSync(
+    const isPasswordCorrect = bcrypt.compareSync(
       req.body.password,
       data[0].password
     );
-    if (!isPasswwordCorrect) {
+    if (!isPasswordCorrect) {
       return res.status(400).json("Wrong username or password!");
     }
 
@@ -52,9 +52,8 @@ export const login = (req, res) => {
     res
       .cookie("access_token", token, {
         httpOnly: true,
-        secure: true,
-        sameSite: "None",
-        path: "http://localhost:3000",
+        maxAge: 31536000,
+        path: "/",
       })
       .status(200)
       .json(other);
@@ -64,11 +63,10 @@ export const login = (req, res) => {
 export const logout = (req, res) => {
   res
     .clearCookie("access_token", {
-      httpOnly: true,
       secure: true,
       sameSite: "None",
-      path: "http://localhost:3000",
+      path: "/",
     })
     .status(200)
-    .json("User has been deleted");
+    .json("User has been logout");
 };
