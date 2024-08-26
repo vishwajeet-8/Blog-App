@@ -2,29 +2,22 @@ import axios from "axios";
 import moment from "moment";
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Editor, EditorState } from "draft-js";
-import "draft-js/dist/Draft.css";
 
 const Write = () => {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
-
   const state = useLocation().state;
-  const navigate = useNavigate();
   const [value, setValue] = useState(state?.desc || "");
   const [title, setTitle] = useState(state?.title || "");
   const [cat, setCat] = useState(state?.cat || "");
   const [file, setFile] = useState(null);
 
+  const navigate = useNavigate();
   const upload = async () => {
     try {
       const formData = new FormData();
       formData.append("file", file);
       const res = await axios.post(
         "http://localhost:8000/api/upload",
-        formData,
-        {
-          withCredentials: true,
-        }
+        formData
       );
       return res.data;
     } catch (err) {
@@ -36,37 +29,39 @@ const Write = () => {
     e.preventDefault();
     const imgUrl = await upload();
     console.log(imgUrl);
-    // try {
-    //   state
-    //     ? await axios.put(
-    //         `http://localhost:8000/api/posts/${state.id}`,
-    //         {
-    //           title,
-    //           desc: value,
-    //           cat,
-    //           img: file ? imgUrl : "",
-    //         },
-    //         {
-    //           withCredentials: true,
-    //         }
-    //       )
-    //     : await axios.post(
-    //         `http://localhost:8000/api/posts/`,
-    //         {
-    //           title,
-    //           desc: value,
-    //           cat,
-    //           img: file ? imgUrl : "",
-    //           date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-    //         },
-    //         {
-    //           withCredentials: true,
-    //         }
-    //       );
-    //   navigate("/");
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      if (state) {
+        await axios.put(
+          `http://localhost:8000/api/posts/${state.id}`,
+          {
+            title,
+            desc: value,
+            cat,
+            img: file ? imgUrl : "",
+          },
+          {
+            withCredentials: true,
+          }
+        );
+      } else {
+        await axios.post(
+          "http://localhost:8000/api/posts",
+          {
+            title,
+            desc: value,
+            cat,
+            img: file ? imgUrl : "",
+            date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+          },
+          {
+            withCredentials: true,
+          }
+        );
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    navigate("/");
   };
 
   return (
@@ -74,16 +69,18 @@ const Write = () => {
       <div className="content">
         <input
           type="text"
+          name="title"
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <div className="editorContainer">
-          <Editor
-            editorState={editorState}
-            onChange={setEditorState}
-            placeholder="Write something..."
-          />
+          <textarea
+            name="desc"
+            className="textarea"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+          ></textarea>
         </div>
       </div>
       <div className="menu">
@@ -99,7 +96,7 @@ const Write = () => {
             style={{ display: "none" }}
             type="file"
             id="file"
-            name=""
+            name="file"
             onChange={(e) => setFile(e.target.files[0])}
           />
           <label className="file" htmlFor="file">
@@ -107,7 +104,9 @@ const Write = () => {
           </label>
           <div className="buttons">
             <button>Save as a draft</button>
-            <button onClick={handleClick}>Publish</button>
+            <button type="button" onClick={handleClick}>
+              Publish
+            </button>
           </div>
         </div>
         <div className="item">

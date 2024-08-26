@@ -317,12 +317,12 @@ $lightGreen: #b9e7e7;
 
         .editorContainer {
           height: 300px;
-          overflow: scroll;
           border: 1px solid lightgray;
 
-          .editor {
+          .textarea {
             height: 100%;
-            border: none;
+            width: 100%;
+            border: 1px solid lightgray;
           }
         }
       }
