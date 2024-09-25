@@ -16,7 +16,7 @@ const Write = () => {
       const formData = new FormData();
       formData.append("file", file);
       const res = await axios.post(
-        "http://localhost:8000/api/upload",
+        `${process.env.REACT_APP_ORIGIN}/api/upload`,
         formData
       );
       return res.data;
@@ -32,7 +32,7 @@ const Write = () => {
     try {
       if (state) {
         await axios.put(
-          `http://localhost:8000/api/posts/${state.id}`,
+          `${process.env.REACT_APP_ORIGIN}/api/posts/${state.id}`,
           {
             title,
             desc: value,
@@ -45,7 +45,7 @@ const Write = () => {
         );
       } else {
         await axios.post(
-          "http://localhost:8000/api/posts",
+          `${process.env.REACT_APP_ORIGIN}/api/posts`,
           {
             title,
             desc: value,

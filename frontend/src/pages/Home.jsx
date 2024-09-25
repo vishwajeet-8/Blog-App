@@ -5,13 +5,15 @@ import axios from "axios";
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const cat = useLocation().search;
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`http://localhost:8000/api/posts${cat}`, {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `${process.env.REACT_APP_ORIGIN}/api/posts${cat}`,
+          {
+            withCredentials: true,
+          }
+        );
         setPosts(res.data);
       } catch (err) {
         console.log(err);

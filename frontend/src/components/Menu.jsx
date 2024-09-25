@@ -8,7 +8,7 @@ const Menu = ({ cat }) => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/posts/?cat=${cat}`,
+          `${process.env.REACT_APP_ORIGIN}/api/posts/?cat=${cat}`,
           {
             withCredentials: true,
           }

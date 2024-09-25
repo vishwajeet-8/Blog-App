@@ -10,7 +10,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const login = async (inputs) => {
     const res = await axios.post(
-      "http://localhost:8000/api/auth/login",
+      `${process.env.REACT_APP_ORIGIN}/api/auth/login`,
       inputs,
       {
         withCredentials: true,
@@ -20,7 +20,7 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await axios.post("http://localhost:8000/api/auth/logout", {
+    await axios.post(`${process.env.REACT_APP_ORIGIN}/api/auth/logout`, {
       withCredentials: true,
     });
     setCurrentUser(null);
