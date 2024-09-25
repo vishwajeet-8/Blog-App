@@ -8,3 +8,11 @@ export const db = mysql.createConnection({
   password: process.env.PASSWORD,
   database: process.env.DATABASE,
 });
+
+db.on("error", (err) => {
+  if (err.code === "PROTOCOL_CONNECTION_LOST") {
+    handleDisconnect(); // Reconnect if connection was lost
+  } else {
+    throw err; // For other errors, propagate the error
+  }
+});
